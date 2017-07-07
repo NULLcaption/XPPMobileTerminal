@@ -1,0 +1,353 @@
+﻿package com.xpp.moblie.screens;
+
+import com.xpp.moblie.application.XPPApplication;
+import com.xpp.moblie.provider.DataProviderFactory;
+import com.xpp.moblie.provider.UpdateTask;
+import com.xpp.moblie.provider.WebService;
+import com.xpp.moblie.query.OrmHelper;
+import com.xpp.moblie.service.PhotoTimeService;
+import com.xpp.moblie.service.UploadDataService;
+import com.xpp.moblie.util.Constants;
+import com.xpp.moblie.util.VersionUpdate;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.InputType;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.AnimationDrawable;
+/**
+ * @Description:登陆页面
+ * @author:xg.chen
+ * @time:2017年4月21日 下午4:32:14
+ * @version:1.0
+ */
+public class LoginActivity extends Activity {
+	private EditText et_loginName, et_password;
+	private Dialog waitingDialog;
+	private LoginTask loginTask;
+	private CheckBox cb_remberpsd;
+	private int changenettime=0;
+	private int shengchangji=0;//是否为生产机开关,0为生产机
+	private int isupdate=0;//是否检查升级，0为检查
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.layout_login);
+		OrmHelper.createInstance(getApplicationContext());
+		DataProviderFactory.setContext(getApplicationContext());
+		init();
+	}
+
+	private void init() {
+		
+		findViewById(R.id.btn_login).setOnClickListener(BtnClicked);
+		et_loginName = (EditText) findViewById(R.id.userName);
+		et_password = (EditText) findViewById(R.id.password);
+		cb_remberpsd=(CheckBox)findViewById(R.id.remberpsd);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		TextView tv_version = (TextView) findViewById(R.id.version);
+		tv_version.setText(getVersionName());
+		String localpassword = DataProviderFactory.getLocalPassword();
+		String loginName = DataProviderFactory.getLoginName();
+		String chkpsd=DataProviderFactory.getRemberpsd();
+//		System.out.println("loginName:"+loginName);
+//		System.out.println("localpassword:"+localpassword);
+//		System.out.println("chkpsd:"+chkpsd);
+		if (loginName != null && et_loginName != null) {
+			// userNameET.setText(userName.replaceAll("^(0+)", ""));
+			et_loginName.setText(DataProviderFactory.getLoginName());
+		}
+		if ("Y".equals(chkpsd) && localpassword != null && et_password != null){
+			// userNameET.setText(userName.replaceAll("^(0+)", ""));
+			cb_remberpsd.setChecked(true);	
+			et_password.setText(DataProviderFactory.getLocalPassword());
+		}
+		// et_password.setText("111111");
+		et_password.setInputType(InputType.TYPE_CLASS_TEXT
+				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+	}
+
+	/** ������� */
+	private OnClickListener BtnClicked = new OnClickListener() {
+		public void onClick(View v) {
+//			Toast.makeText(getApplicationContext(), "打印登陆网址："+WebService.getOPENAPIURL(),
+//					Toast.LENGTH_SHORT).show();
+			switch (v.getId()) {
+			case R.id.btn_login:
+				tryLogin();
+				// InsertDataUtil.initCustomer();
+				// InsertDataUtil.initMarketActivity();
+				break;
+			}
+		}
+
+	};
+
+	private class LoginTask extends AsyncTask<Object, Integer, Integer> {
+		@Override
+		protected void onPreExecute() {
+			if (cb_remberpsd.isChecked()) {
+				DataProviderFactory.setRemberpsd("Y");
+			}
+			else {
+				DataProviderFactory.setRemberpsd("N");
+			}
+			DataProviderFactory.setLoginName(et_loginName.getText().toString());
+		
+			showWaitingDialog();
+
+		}
+
+		protected Integer doInBackground(Object... arg0) {
+			return DataProviderFactory.getProvider().login(
+					et_password.getText().toString());
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+//			System.out.println("打印登陆状态："+result);
+			switch (result) {
+			case XPPApplication.SUCCESS:
+				Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_success), Toast.LENGTH_LONG)
+						.show();
+				Intent iUpload = new Intent(LoginActivity.this,
+						UploadDataService.class);
+				startService(iUpload);
+				Intent intenttime = new Intent(LoginActivity.this,
+						PhotoTimeService.class);
+				startService(intenttime);
+				finish();
+				// DataProviderFactory.getProvider().startDataUpdateTasks(LoginActivity.this);
+				new UpdateTask(LoginActivity.this,false).execute();
+				DataProviderFactory.setMenuId(0);
+				startActivity(i);
+				overridePendingTransition(R.anim.in_from_top,
+						R.anim.out_to_bottom);
+				break;
+			case XPPApplication.ERR_PASSWORD:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_error_password),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.NO_USER:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_no_user), Toast.LENGTH_SHORT)
+						.show();
+				break;
+			case XPPApplication.ERR_ROLE:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_error_role),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.OFFLINE_ERROR_PASSWORD:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_offline_error_password),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.OFFLINE_LOADED:
+//				if (changenet()) 
+//					break;
+//				
+				
+				Intent offlineIntent = new Intent(LoginActivity.this,
+						HomeActivity.class);
+				Intent offlineService = new Intent(LoginActivity.this,
+						UploadDataService.class);
+				startService(offlineService);
+				Intent offlinetime = new Intent(LoginActivity.this,
+						PhotoTimeService.class);
+				startService(offlinetime);
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_offline_loaded),
+						Toast.LENGTH_SHORT).show();
+				finish();
+				DataProviderFactory.setMenuId(0);
+				offlineIntent.putExtra("menu", "Y");
+				startActivity(offlineIntent);
+				overridePendingTransition(R.anim.in_from_top,
+						R.anim.out_to_bottom);
+				break;
+			case XPPApplication.FAIL:
+//				if (changenet()) 
+//					break;
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_fail), Toast.LENGTH_SHORT)
+						.show();
+				break;
+
+			case XPPApplication.FAIL_CONNECT_SERVER:
+//				if (changenet()) 
+//					break;
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_fail_connect),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.NO_NETWORK:
+//				if (changenet()) 
+//					break;
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_no_network),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.NO_MOBILE:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_no_mobile),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case XPPApplication.NOTBUSINESSPHONE:
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.login_not_business),
+						Toast.LENGTH_SHORT).show();
+				break;	
+			 case XPPApplication.UPDATE_VERSION:
+				 if (isupdate==0) {
+					 SharedPreferences settings = getSharedPreferences("PrefsFile",
+								Context.MODE_PRIVATE);
+					 new VersionUpdate(LoginActivity.this, settings.getString("version", ""));
+				} else {
+					Intent i1 = new Intent(LoginActivity.this, HomeActivity.class);
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.login_success), Toast.LENGTH_SHORT)
+							.show();
+					Intent iUpload1 = new Intent(LoginActivity.this,
+							UploadDataService.class);
+					startService(iUpload1);
+					Intent intenttime1 = new Intent(LoginActivity.this,
+							PhotoTimeService.class);
+					startService(intenttime1);
+					finish();
+					// DataProviderFactory.getProvider().startDataUpdateTasks(LoginActivity.this);
+					new UpdateTask(LoginActivity.this,false).execute();
+					DataProviderFactory.setMenuId(0);
+					startActivity(i1);
+					overridePendingTransition(R.anim.in_from_top,
+							R.anim.out_to_bottom);
+
+				}
+				 
+					break;
+				 
+					
+				
+			
+			}
+			dismissWaitingDialog();
+
+		}
+	}
+	private boolean changenet(){
+	if (changenettime==0 && shengchangji==0) {
+		changenettime=1;
+		WebService.setOPENAPIURL("http://172.11.38.82:8103");
+		tryLogin();
+		return true;
+	}
+	return false;
+  }
+	/** 登陆 */
+	private void tryLogin() {
+		String userName = et_loginName.getText().toString();
+		String passWord = et_password.getText().toString();
+		
+		// ����ȥ��
+		if (userName.length() != 0 && passWord.length() != 0) {
+			//获取本机号码
+//			TelephonyManager phoneMgr=(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);  
+//			String phoneSelfNum = phoneMgr.getLine1Number();
+//			if (phoneSelfNum.length()>=11) {
+//				phoneSelfNum=phoneSelfNum.substring(phoneSelfNum.length()-11);
+//			}
+			
+//			String imei = phoneMgr.getSimSerialNumber();
+//			Toast.makeText(getApplicationContext(), "当前号码:"+phoneSelfNum+",序列号"+imei,
+//					Toast.LENGTH_LONG).show();
+//			DataProviderFactory.setPhoneSelfNum(phoneSelfNum);
+			loginTask = new LoginTask();
+			loginTask.execute();
+		} else {
+			Toast.makeText(getApplicationContext(), "账号或密码不能为空",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+	}
+
+	private void cancelLogin() {
+		dismissWaitingDialog();
+		if (loginTask != null) {
+			loginTask.cancel(true);
+			loginTask = null;
+			return;
+		}
+	}
+
+	private String getVersionName() {
+		PackageInfo packInfo = null;
+		try {
+			PackageManager packageManager = getPackageManager();
+			packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return packInfo.versionName;
+	}
+
+	private void showWaitingDialog() {
+		if (waitingDialog == null) {
+		
+			waitingDialog = new Dialog(this, R.style.TransparentDialog);
+			waitingDialog.setContentView(R.layout.login_waiting_dialog);
+			DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
+				@Override
+				public void onShow(DialogInterface dialog) {
+					ImageView img = (ImageView) waitingDialog
+							.findViewById(R.id.loading);
+					((AnimationDrawable) img.getDrawable()).start();
+				}
+			};
+			DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					cancelLogin();
+				}
+			};
+			waitingDialog.setOnShowListener(showListener);
+			waitingDialog.setCanceledOnTouchOutside(false);
+			waitingDialog.setOnCancelListener(cancelListener);
+			waitingDialog.show();
+		}
+	}
+
+	private void dismissWaitingDialog() {
+		if (waitingDialog != null) {
+			ImageView img = (ImageView) waitingDialog
+					.findViewById(R.id.loading);
+			((AnimationDrawable) img.getDrawable()).stop();
+
+			waitingDialog.dismiss();
+			waitingDialog = null;
+		}
+	}
+
+}

@@ -1,0 +1,934 @@
+package com.xpp.moblie.screens;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
+import com.xpp.moblie.application.XPPApplication;
+import com.xpp.moblie.entity.BaseDivision;
+import com.xpp.moblie.provider.DataProviderFactory;
+import com.xpp.moblie.query.Channel;
+import com.xpp.moblie.query.Customer;
+import com.xpp.moblie.util.ToastUtil;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListPopupWindow;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/**
+ * Title: 客户管理 Description: XPPMobileTerminal version:1.1 新增两个字段
+ */
+public class CustomerActivity extends Activity {
+	private EditText et_custNameInput, et_contact, et_phone, et_mobile,
+			et_businessLicense, et_address, et_areaAddress, et_kunnrName,
+			et_customerImportance, et_customerAnnualSale;
+	private Button btn_channel, btn_dialMobile, btn_dialPhoto;// btn_searchAreaAddress,
+	private TextView tv_title;
+	private Dialog waitingDialog;
+	private Customer customer;
+	private Dialog overdialog;
+	private String channelId = "";
+	private String zwl04 = "";
+	private String kunnr = "";
+	private TextView tv1_jingdu, tv2_weidu, tv3_address;
+	// 定位
+	private LocationClient lc = null;
+	private MyBaidulistener mylistener = null;
+
+	private ListPopupWindow lpw;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		setContentView(R.layout.layout_customer_detail);
+		super.onCreate(savedInstanceState);
+		initView();
+		initData();
+
+	}
+
+	private void initView() {
+		tv_title = (TextView) findViewById(R.id.custName);
+		et_custNameInput = (EditText) findViewById(R.id.custNameInput);
+		et_contact = (EditText) findViewById(R.id.contact);
+		et_phone = (EditText) findViewById(R.id.phone);
+		et_mobile = (EditText) findViewById(R.id.mobile);
+		et_businessLicense = (EditText) findViewById(R.id.businessLicense);
+		et_address = (EditText) findViewById(R.id.address);
+		et_areaAddress = (EditText) findViewById(R.id.areaAddress);
+		btn_dialMobile = (Button) findViewById(R.id.dialMobile);
+		btn_dialPhoto = (Button) findViewById(R.id.dialPhone);
+		btn_channel = (Button) findViewById(R.id.channel);
+		btn_channel.setOnClickListener(BtnClicked);
+		et_kunnrName = (EditText) findViewById(R.id.kunnrName);
+
+		// 门店重要重要选择
+		et_customerImportance = (EditText) findViewById(R.id.customerImportance);
+		// 设置复选框事件监听
+		et_customerImportance.setOnClickListener(BtnClicked);
+		// 门店销售额
+		et_customerAnnualSale = (EditText) findViewById(R.id.customerAnnualSale);
+
+		tv1_jingdu = (TextView) findViewById(R.id.tv1_jingdus);
+		tv2_weidu = (TextView) findViewById(R.id.tv2_weidus);
+		tv3_address = (TextView) findViewById(R.id.tv3_address);
+		tv3_address.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText("simple text",
+						tv3_address.getText());
+				clipboard.setPrimaryClip(clip);
+				Toast.makeText(getApplicationContext(), "参考地址已复制！",
+						Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
+		findViewById(R.id.searchAddress).setOnClickListener(BtnClicked);
+		findViewById(R.id.searchKunnr).setOnClickListener(BtnClicked);
+		findViewById(R.id.save).setOnClickListener(BtnClicked);
+		findViewById(R.id.home_back).setOnClickListener(BtnClicked);
+
+	}
+
+	/**
+	 * MethodsTitle: 初始经纬度
+	 * 
+	 * @author: xg.chen
+	 * @date:2016年11月7日
+	 */
+	private void indingwei() {
+		lc = new LocationClient(getApplicationContext());
+		mylistener = new MyBaidulistener();
+		lc.registerLocationListener(mylistener);
+		setviews();
+		lc.start();
+
+	}
+
+	public void setviews() {
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
+		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
+		option.setScanSpan(5000);// 设置发起定位请求的间隔时间为5000ms
+		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
+		option.setNeedDeviceDirect(true);// 返回的定位结果包含手机机头的方向
+		lc.setLocOption(option);
+	}
+
+	public class MyBaidulistener implements BDLocationListener {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			if (location.getProvince() != null) {
+				tv1_jingdu.setText(location.getLongitude() + "");
+				tv2_weidu.setText(location.getLatitude() + "");
+				tv3_address.setText("" + location.getProvince() + ""
+						+ location.getCity() + "" + location.getDistrict() + ""
+						+ location.getStreet() + ""
+						+ location.getStreetNumber());
+			} else {
+				tv1_jingdu.setText("");
+				tv2_weidu.setText("");
+				tv3_address.setText("");
+			}
+
+		}
+
+	}
+
+	// 解除绑定
+	@Override
+	protected void onDestroy() {
+		if (lc != null) {
+			lc.stop();
+		}
+		super.onDestroy();
+	}
+
+	/**
+	 * MethodsTitle: 初始化修改客户数据
+	 * 
+	 * @author: xg.chen
+	 * @date:2016年11月7日
+	 */
+	private void initData() {
+		Bundle bun = getIntent().getExtras();
+		if (bun != null) {
+			customer = (Customer) bun.get("custInfo");
+		}
+		if (customer != null) {// 修改门店信息
+			indingwei();// 获取经纬度
+			tv_title.setText(getString(R.string.customer_modify));
+			et_custNameInput.setText(customer.getCustName());
+			et_contact.setText(customer.getContractName());
+			et_phone.setText(customer.getContractPhone());
+			et_mobile.setText(customer.getContractMobile());
+			et_businessLicense.setText(customer.getBusinessLicense());
+			et_address.setText(customer.getAddress());
+			et_areaAddress.setText(customer.getDiviName());
+			btn_channel.setText(customer.getChannelDesc());
+			et_kunnrName.setText(customer.getKunnrName());
+			tv1_jingdu.setText(customer.getLongitude());
+			tv2_weidu.setText(customer.getLatitude());
+			tv3_address.setText(customer.getAddress());
+			kunnr = customer.getKunnr();
+			et_customerImportance.setText(customer.getCustomerImportance());
+			et_customerAnnualSale.setText(customer.getCustomerAnnualSale());
+			zwl04 = customer.getZwl04();
+			channelId = customer.getChannelId();
+			btn_channel.setText(Channel.findByChannel(channelId)
+					.getChannelDesc());
+		} else {
+			indingwei();// 获取经纬度
+			SharedPreferences settings = getSharedPreferences(
+					DataProviderFactory.PREFS_NAME, Context.MODE_PRIVATE);
+			if (settings.getString(DataProviderFactory.PREFS_ZW104, null) != null) {
+				zwl04 = settings.getString(DataProviderFactory.PREFS_ZW104,
+						null);
+				et_areaAddress.setText(settings.getString(
+						DataProviderFactory.PREFS_DIVINAME, null));
+			}
+			if (settings.getString(DataProviderFactory.PREFS_DEFAULT_KUNNR,
+					null) != null) {
+				kunnr = settings.getString(
+						DataProviderFactory.PREFS_DEFAULT_KUNNR, null);
+				et_kunnrName.setText(settings.getString(
+						DataProviderFactory.PREFS_DEFAULT_KUNNR_NAME, null));
+			}
+
+		}
+
+		btn_dialPhoto.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				String phoneno = et_phone.getText().toString();
+				if (phoneno == null || "".equals(phoneno.trim())) {
+					Toast.makeText(getApplicationContext(), "没有电话号码",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getApplicationContext(), "拨号:" + phoneno,
+							Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(Intent.ACTION_CALL, Uri
+							.parse("tel:" + phoneno));
+					startActivity(intent);
+				}
+			}
+		});
+
+		btn_dialMobile.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				String phoneno = et_mobile.getText().toString();
+				if (phoneno == null || "".equals(phoneno.trim())) {
+					Toast.makeText(getApplicationContext(), "没有电话号码",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getApplicationContext(), "拨号:" + phoneno,
+							Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(Intent.ACTION_CALL, Uri
+							.parse("tel:" + phoneno));
+					startActivity(intent);
+				}
+			}
+		});
+
+	}
+
+	private OnClickListener BtnClicked = new OnClickListener() {
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.home_back:
+				XPPApplication.exit(CustomerActivity.this);
+				break;
+			case R.id.save:
+				if ("".equals(et_custNameInput.getText().toString().trim())) {
+					Toast.makeText(getApplicationContext(), "请输入客户名称...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(et_contact.getText().toString().trim())) {
+					Toast.makeText(getApplicationContext(), "请输入联系人...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(et_phone.getText().toString().trim())
+						&& "".equals(et_mobile.getText().toString().trim())) {
+					Toast.makeText(getApplicationContext(), "请输入联系方式...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+
+				if (!et_mobile.getText().toString().matches("^[0-9]{11}$")) {
+					ToastUtil.show(getApplicationContext(), "请检查手机号格式...");
+				}
+				if ("".equals(btn_channel.getText().toString().trim())
+						|| "".equals(channelId)) {
+					Toast.makeText(getApplicationContext(), "请选择渠道...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(zwl04)
+						|| "".equals(et_areaAddress.getText().toString().trim())) {
+					Toast.makeText(getApplicationContext(), "请选择镇/乡..",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(et_address.getText().toString().trim())) {
+					Toast.makeText(getApplicationContext(), "请输入地址...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+
+				if ("".equals(et_kunnrName.getText().toString().trim())
+						|| "".equals(kunnr)) {
+					Toast.makeText(getApplicationContext(), "请选择经销商...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(et_customerImportance.getText().toString())) {
+					String txt1 = et_customerImportance.getText().toString();
+					if (!txt1.equals("甲") || !txt1.equals("乙")
+							|| !txt1.equals("丙")) {
+						Toast.makeText(getApplicationContext(),
+								"请选择准确的门店重要度...", Toast.LENGTH_SHORT).show();
+						break;
+					}
+					Toast.makeText(getApplicationContext(), "请选择门店重要度...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				if ("".equals(et_customerAnnualSale.getText().toString().trim())) {
+					// 正则判断下是否输入值为数字，小数点后保留两位，且为整数
+					Pattern p2 = Pattern.compile("^\\d+(\\.\\d{1,2})$");
+					String sale = et_customerAnnualSale.getText().toString()
+							.trim();
+					Matcher matcher = p2.matcher(sale);
+					if (!matcher.matches()) {
+						Toast.makeText(getApplicationContext(),
+								"请填写准确的门店销售金额...", Toast.LENGTH_SHORT).show();
+						break;
+					}
+					Toast.makeText(getApplicationContext(), "请填写门店销售金额...",
+							Toast.LENGTH_SHORT).show();
+					break;
+				}
+				new createCustomerTask().execute();
+				break;
+			case R.id.channel:
+				overdialog = null;
+				View overdiaView = View.inflate(CustomerActivity.this,
+						R.layout.dialog_search_shop_msg, null);
+				overdialog = new Dialog(CustomerActivity.this,
+						R.style.dialog_xw);
+				ListView clist = (ListView) overdiaView
+						.findViewById(R.id.clist);
+				TextView tv_title = (TextView) overdiaView
+						.findViewById(R.id.Title);
+				tv_title.setText("渠道列表");
+				SettingAdapter settingAdapter = new SettingAdapter(
+						getApplicationContext(), Channel.findAll());
+				clist.setAdapter(settingAdapter);
+				overdialog.setContentView(overdiaView);
+				overdialog.setCanceledOnTouchOutside(false);
+				Button overcancel = (Button) overdiaView
+						.findViewById(R.id.dialog_cancel_btn);
+				overcancel.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						overdialog.cancel();
+					}
+				});
+				overdialog.show();
+				break;
+			case R.id.customerImportance:
+				overdialog = null;
+				View overdiaView1 = View.inflate(CustomerActivity.this,
+						R.layout.dialog_search_shop_msg, null);
+				overdialog = new Dialog(CustomerActivity.this,
+						R.style.dialog_xw);
+				ListView clist1 = (ListView) overdiaView1
+						.findViewById(R.id.clist);
+				TextView tv_title1 = (TextView) overdiaView1
+						.findViewById(R.id.Title);
+				tv_title1.setText("门店重要度");
+				List<String> list = new ArrayList<String>();
+				list.add("甲");
+				list.add("乙");
+				list.add("丙");
+				SettingAdapter1 settingAdapter1 = new SettingAdapter1(
+						getApplicationContext(), list);
+				clist1.setAdapter(settingAdapter1);
+				overdialog.setContentView(overdiaView1);
+				overdialog.setCanceledOnTouchOutside(false);
+				Button overcancel1 = (Button) overdiaView1
+						.findViewById(R.id.dialog_cancel_btn);
+				overcancel1.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						overdialog.cancel();
+					}
+				});
+				overdialog.show();
+				break;
+			case R.id.searchAddress:
+				if (et_areaAddress.getText().toString().trim().equals("")) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.not_null), Toast.LENGTH_SHORT)
+							.show();
+				} else {
+					new searchDivisionTask().execute(et_areaAddress.getText()
+							.toString().trim());
+				}
+				break;
+			case R.id.searchKunnr:
+				if (et_kunnrName.getText().toString().trim().equals("")) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.not_null), Toast.LENGTH_SHORT)
+							.show();
+				} else {
+					new searchKunnrTask().execute(et_kunnrName.getText()
+							.toString().trim());
+				}
+				break;
+			}
+		}
+
+	};
+
+	/**
+	 * Title: 门店重要性之选择框操作 Description: XPPMobileTerminal
+	 * 
+	 * @author: xg.chen
+	 * @date:2016年10月21日
+	 */
+	protected class ViewHodler1 {
+		TextView stringList = null;
+	}
+
+	protected void resetViewHolder1(ViewHodler1 pViewHolder) {
+		pViewHolder.stringList.setText(null);
+	}
+
+	public class SettingAdapter1 extends BaseAdapter {
+		private List<String> data = new ArrayList<String>();
+		private LayoutInflater layoutInflater;
+
+		public SettingAdapter1(Context context, List<String> data) {
+			this.data = data;
+			this.layoutInflater = LayoutInflater.from(context);
+		}
+
+		public int getCount() {
+			return data.size();
+		}
+
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHodler1 hodler = null;
+			if (convertView == null) {
+				// 获取组件布局
+				hodler = new ViewHodler1();
+				convertView = layoutInflater.inflate(
+						R.layout.dialog_search_shop_list_child, null);
+				hodler.stringList = (TextView) convertView
+						.findViewById(R.id.custName1);
+				convertView.setTag(hodler);
+			} else {
+				hodler = (ViewHodler1) convertView.getTag();
+				resetViewHolder1(hodler);
+			}
+
+			hodler.stringList.setText(data.get(position));
+			// 绑定数据、以及事件触发
+			final int n = position;
+			convertView.setOnClickListener(new OnClickListener() {
+				public void onClick(View arg0) {
+					// channelId = data.get(n);
+					et_customerImportance.setText(data.get(n));
+					overdialog.cancel();
+				}
+			});
+			return convertView;
+		}
+
+	}
+
+	/**
+	 * Title: 渠道选择之列表操作 Description: XPPMobileTerminal
+	 * 
+	 * @author: xg.chen
+	 * @date:2016年10月21日
+	 */
+	protected class ViewHodler {
+		TextView channelDesc = null;
+	}
+
+	protected void resetViewHolder(ViewHodler pViewHolder) {
+		pViewHolder.channelDesc.setText(null);
+	}
+
+	public class SettingAdapter extends BaseAdapter {
+		private List<Channel> data = new ArrayList<Channel>();//
+		private LayoutInflater layoutInflater;
+
+		public SettingAdapter(Context context, List<Channel> data) {
+			this.data = data;
+			this.layoutInflater = LayoutInflater.from(context);
+		}
+
+		public int getCount() {
+			return data.size();
+		}
+
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHodler hodler = null;
+			if (convertView == null) {
+				// 获取组件布局
+				hodler = new ViewHodler();
+				convertView = layoutInflater.inflate(
+						R.layout.dialog_search_shop_list_child, null);
+				hodler.channelDesc = (TextView) convertView
+						.findViewById(R.id.custName);
+				convertView.setTag(hodler);
+			} else {
+				hodler = (ViewHodler) convertView.getTag();
+				resetViewHolder(hodler);
+			}
+
+			hodler.channelDesc.setText(data.get(position).getChannelDesc());
+			// 绑定数据、以及事件触发
+			final int n = position;
+			convertView.setOnClickListener(new OnClickListener() {
+				public void onClick(View arg0) {
+					channelId = data.get(n).getChannelId();
+					btn_channel.setText(data.get(n).getChannelDesc());
+					overdialog.cancel();
+				}
+			});
+			return convertView;
+		}
+	}
+
+	private class createCustomerTask extends AsyncTask<Object, Integer, String> {
+
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showWaitingDialog();
+		}
+
+		protected String doInBackground(Object... arg0) {
+			if (customer == null) {// 添加创建门店数据
+				customer = new Customer(et_custNameInput.getText().toString()
+						.trim(), channelId, btn_channel.getText().toString()
+						.trim(), et_areaAddress.getText().toString().trim(),
+						zwl04, et_address.getText().toString().trim(),
+						DataProviderFactory.getUserId(), et_contact.getText()
+								.toString().trim(), et_phone.getText()
+								.toString().trim(), et_mobile.getText()
+								.toString().trim(), "", "13488",
+						et_businessLicense.getText().toString().trim(), kunnr,
+						et_kunnrName.getText().toString().trim(), tv1_jingdu
+								.getText().toString(),// 经度
+						tv2_weidu.getText().toString(), et_customerImportance
+								.getText().toString(), et_customerAnnualSale
+								.getText().toString());
+			} else {// 修改门店数据
+				customer.setCustName(et_custNameInput.getText().toString()
+						.trim());
+				customer.setChannelId(channelId);
+				customer.setChannelDesc(btn_channel.getText().toString().trim());
+				customer.setDiviName(et_areaAddress.getText().toString().trim());
+				customer.setZwl04(zwl04);
+				customer.setAddress(et_address.getText().toString().trim());
+				customer.setContractName(et_contact.getText().toString().trim());
+				customer.setContractPhone(et_phone.getText().toString().trim());
+				customer.setContractMobile(et_mobile.getText().toString()
+						.trim());
+				customer.setBusinessLicense(et_businessLicense.getText()
+						.toString().trim());
+				customer.setKunnr(kunnr);
+				customer.setKunnrName(et_kunnrName.getText().toString().trim());
+				customer.setCustomerImportance(et_customerImportance.getText()
+						.toString().trim());
+				customer.setCustomerAnnualSale(et_customerAnnualSale.getText()
+						.toString().trim());
+				customer.setLongitude(tv1_jingdu.getText().toString());// 经度
+				customer.setLatitude(tv2_weidu.getText().toString());// 纬度
+
+				customer.update();
+			}
+			return DataProviderFactory.getProvider().createCustomer(customer);
+		}
+
+		protected void onPostExecute(String result) {
+			if (result != null) {
+				if (XPPApplication.UPLOAD_FAIL_CONNECT_SERVER.equals(result)) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.login_fail_connect),
+							Toast.LENGTH_SHORT).show();
+				} else if ("fail".equals(result)) {
+					Toast.makeText(
+							getApplicationContext(),
+							(customer != null ? getString(R.string.customer_modify_fail)
+									: getString(R.string.customer_create_fail)),
+							Toast.LENGTH_SHORT).show();
+				} else if ("same".equals(result)) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.customer_same),
+							Toast.LENGTH_SHORT).show();
+				} else if (XPPApplication.UPLOAD_SUCCESS.equals(result)) {
+					// 修改
+					customer.update();
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.customer_modify_success),
+							Toast.LENGTH_SHORT).show();
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("refresh", "customer");
+					XPPApplication.sendChangeBroad(CustomerActivity.this,
+							XPPApplication.REFRESH_SHOP_RECEIVER, map);
+					XPPApplication.exit(CustomerActivity.this);
+				} else {
+					// 创建
+					customer.setCustId(result);
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.customer_create_success),
+							Toast.LENGTH_SHORT).show();
+					if (customer.save()) {
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("refresh", "customer");
+						XPPApplication.sendChangeBroad(CustomerActivity.this,
+								XPPApplication.REFRESH_SHOP_RECEIVER, map);
+						XPPApplication.exit(CustomerActivity.this);
+					}
+				}
+			} else {
+				Toast.makeText(
+						getApplicationContext(),
+						(customer != null ? getString(R.string.customer_modify_error)
+								: getString(R.string.customer_create_error)),
+						Toast.LENGTH_SHORT).show();
+			}
+			dismissWaitingDialog();
+		}
+	}
+
+	protected class ViewHodlerDivision {
+		TextView diviName = null;
+	}
+
+	protected void resetViewHolderDivision(ViewHodlerDivision pViewHolder) {
+		pViewHolder.diviName.setText(null);
+	}
+
+	/**
+	 * Title: 行政区域查询adapter Description: XPPMobileTerminal
+	 * 
+	 * @author: xg.chen
+	 * @date:2016年10月21日
+	 */
+	public class DivisionSettingAdapter extends BaseAdapter {
+		private List<BaseDivision> data = new ArrayList<BaseDivision>();//
+		private LayoutInflater layoutInflater;
+
+		public DivisionSettingAdapter(Context context, List<BaseDivision> data) {
+			this.data = data;
+			this.layoutInflater = LayoutInflater.from(context);
+		}
+
+		public int getCount() {
+			return data.size();
+		}
+
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHodlerDivision hodler = null;
+			if (convertView == null) {
+				// 获取组件布局
+				hodler = new ViewHodlerDivision();
+				convertView = layoutInflater.inflate(
+						R.layout.dialog_search_shop_list_child, null);
+				hodler.diviName = (TextView) convertView
+						.findViewById(R.id.custName);
+				convertView.setTag(hodler);
+			} else {
+				hodler = (ViewHodlerDivision) convertView.getTag();
+				resetViewHolderDivision(hodler);
+			}
+
+			hodler.diviName.setText(data.get(position).getDiviName());
+
+			// 绑定数据、以及事件触发
+			final int n = position;
+			convertView.setOnClickListener(new OnClickListener() {
+				public void onClick(View arg0) {
+					zwl04 = data.get(n).getZwl04();
+					et_areaAddress.setText(data.get(n).getDiviName());
+					overdialog.cancel();
+				}
+			});
+			return convertView;
+		}
+	}
+
+	private class searchDivisionTask extends
+			AsyncTask<String, Integer, List<BaseDivision>> {
+
+		protected void onPreExecute() {
+			showWaitingDialog();
+
+		}
+
+		protected List<BaseDivision> doInBackground(String... arg0) {
+			String str = arg0[0];
+			// if (UpdateTask.getInstance().getStatus() ==
+			// AsyncTask.Status.RUNNING) {
+			// UpdateTask.getInstance().waitTimeout();
+			// }
+			return DataProviderFactory.getProvider().searchDivision(str);
+		}
+
+		protected void onPostExecute(List<BaseDivision> result) {
+			dismissWaitingDialog();
+			if (result != null && result.size() != 0) {
+				if (result.get(0).getDiviName()
+						.equals(XPPApplication.UPLOAD_FAIL_CONNECT_SERVER)) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.login_fail_connect),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					overdialog = null;
+					View overdiaView = View.inflate(CustomerActivity.this,
+							R.layout.dialog_search_shop_msg, null);
+					overdialog = new Dialog(CustomerActivity.this,
+							R.style.dialog_xw);
+					ListView clist = (ListView) overdiaView
+							.findViewById(R.id.clist);
+					TextView tv_title = (TextView) overdiaView
+							.findViewById(R.id.Title);
+					tv_title.setText("行政区查询");
+					DivisionSettingAdapter dvisionSettingAdapter = new DivisionSettingAdapter(
+							getApplicationContext(), result);
+					clist.setAdapter(dvisionSettingAdapter);
+					overdialog.setContentView(overdiaView);
+					overdialog.setCanceledOnTouchOutside(false);
+					Button overcancel = (Button) overdiaView
+							.findViewById(R.id.dialog_cancel_btn);
+					overcancel.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							overdialog.cancel();
+						}
+					});
+					overdialog.show();
+
+				}
+			} else {
+				Toast.makeText(getApplicationContext(), "查询无记录！",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+
+	}
+
+	/** 经销商查询adapter **/
+	public class KunnrAdapter extends BaseAdapter {
+		private List<Customer> data = new ArrayList<Customer>();//
+		private LayoutInflater layoutInflater;
+
+		public KunnrAdapter(Context context, List<Customer> data) {
+			this.data = data;
+			this.layoutInflater = LayoutInflater.from(context);
+		}
+
+		public int getCount() {
+			return data.size();
+		}
+
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHodlerDivision hodler = null;
+			if (convertView == null) {
+				// 获取组件布局
+				hodler = new ViewHodlerDivision();
+				convertView = layoutInflater.inflate(
+						R.layout.dialog_search_shop_list_child, null);
+				hodler.diviName = (TextView) convertView
+						.findViewById(R.id.custName);
+				convertView.setTag(hodler);
+			} else {
+				hodler = (ViewHodlerDivision) convertView.getTag();
+				resetViewHolderDivision(hodler);
+			}
+			hodler.diviName.setText(data.get(position).getCustName());
+
+			// 绑定数据、以及事件触发
+			final int n = position;
+			convertView.setOnClickListener(new OnClickListener() {
+				public void onClick(View arg0) {
+					kunnr = data.get(n).getCustId();
+					et_kunnrName.setText(data.get(n).getCustName());
+					overdialog.cancel();
+				}
+			});
+			return convertView;
+		}
+	}
+
+	private class searchKunnrTask extends
+			AsyncTask<String, Integer, List<Customer>> {
+
+		protected void onPreExecute() {
+			showWaitingDialog();
+		}
+
+		protected List<Customer> doInBackground(String... arg0) {
+			String str = arg0[0];
+			return DataProviderFactory.getProvider().searchKunnr(str);
+		}
+
+		protected void onPostExecute(List<Customer> result) {
+			dismissWaitingDialog();
+			if (result != null && result.size() != 0) {
+				if (result.get(0).getKunnr()
+						.equals(XPPApplication.UPLOAD_FAIL_CONNECT_SERVER)) {
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.login_fail_connect),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					overdialog = null;
+					View overdiaView = View.inflate(CustomerActivity.this,
+							R.layout.dialog_search_shop_msg, null);
+					overdialog = new Dialog(CustomerActivity.this,
+							R.style.dialog_xw);
+					ListView clist = (ListView) overdiaView
+							.findViewById(R.id.clist);
+					TextView tv_title = (TextView) overdiaView
+							.findViewById(R.id.Title);
+					tv_title.setText("经销商查询");
+					KunnrAdapter kunnrAdapter = new KunnrAdapter(
+							getApplicationContext(), result);
+					clist.setAdapter(kunnrAdapter);
+					overdialog.setContentView(overdiaView);
+					overdialog.setCanceledOnTouchOutside(false);
+					Button overcancel = (Button) overdiaView
+							.findViewById(R.id.dialog_cancel_btn);
+					overcancel.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							overdialog.cancel();
+						}
+					});
+					overdialog.show();
+
+				}
+			} else {
+				Toast.makeText(getApplicationContext(), "查询无记录！",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+
+	}
+
+	// 取消手机返回按钮功能
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			XPPApplication.exit(CustomerActivity.this);
+			return false;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
+	private void showWaitingDialog() {
+		if (waitingDialog == null) {
+
+			waitingDialog = new Dialog(this, R.style.TransparentDialog);
+			waitingDialog.setContentView(R.layout.login_waiting_dialog);
+			DialogInterface.OnShowListener showListener = new DialogInterface.OnShowListener() {
+				@Override
+				public void onShow(DialogInterface dialog) {
+					ImageView img = (ImageView) waitingDialog
+							.findViewById(R.id.loading);
+					((AnimationDrawable) img.getDrawable()).start();
+				}
+			};
+			DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					// updateButtonLook(false);
+				}
+			};
+			waitingDialog.setOnShowListener(showListener);
+			waitingDialog.setCanceledOnTouchOutside(false);
+			waitingDialog.setOnCancelListener(cancelListener);
+			waitingDialog.show();
+		}
+	}
+
+	private void dismissWaitingDialog() {
+		if (waitingDialog != null) {
+			ImageView img = (ImageView) waitingDialog
+					.findViewById(R.id.loading);
+			((AnimationDrawable) img.getDrawable()).stop();
+
+			waitingDialog.dismiss();
+			waitingDialog = null;
+		}
+	}
+
+}

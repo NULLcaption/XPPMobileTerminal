@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">香飘飘移动营销</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- login -->
+    <string name="login_username">用户名</string>
+    <string name="login_password">密  码</string>
+    <string name="login_image_desc">登陆企业logo</string>
+    <string name="login_btn_commit">登  陆</string>
+    <string name="login_success">登陆成功</string>
+    <string name="login_error_password">密码错误</string>
+    <string name="login_error_role">请维护角色</string>
+    <string name="login_no_user">用户名不存在</string>
+    <string name="login_offline_error_password">离线登陆，密码有误</string>
+    <string name="login_offline_loaded">离线登陆成功</string>
+    <string name="login_fail">登陆失败</string>
+    <string name="login_fail_connect">连接超时</string>
+    <string name="login_no_network">网络异常，请检查网络</string>
+    <string name="login_no_mobile">请维护公司手机号</string>
+     <string name="login_not_business">请用指定手机号登陆</string>
+    <!-- home -->
+    <string name="home_hi">,你好</string>
+    <string name="home_search_shop">请输入关键词查询门店</string>
+    <string name="home_search_customer">请输入关键词查询经销商</string>
+    <string name="shop_visit">拜访任务</string>
+    <string name="clgl">陈列管理</string>
+    <string name="home_getShopList">门店列表</string>
+    <string name="home_getCustomerList">经销商列表</string>
+    <string name="home_customer_management">客户管理</string>
+    <string name="home_kunnr_management">经销商管理</string>
+    <string name="home_CustStock_management">门店分销量提报</string>
+
+    <!-- photo -->
+    <string name="photo_info">*单击查看大照，长按删除图片</string>
+    <string name="photo_submit">保存</string>
+
+    <!-- market -->
+    <string name="market_activiy_nocheck">未检查</string>
+    <string name="market_activiy_execution">执行</string>
+    <string name="market_activiy_notexecution">未执行</string>
+    <string name="market_activiy_notallexecution">未完全执行</string>
+    <string name="market_hxProportion">核销比例（录入）:</string>
+    <string name="market_checkPercentBus">业务自查比例:</string>
+    <string name="market_reason">业务自查理由:</string>
+    <string name="market_myProportion">我司承担比例 :</string>
+    <string name="market_dxExplanation">督导说明 :</string>
+    <string name="market_activity_id">活动明细ID:</string>
+    <string name="market_activity_desc">活动名：</string>
+    <string name="market_activity_detail">活动详细信息：</string>
+    <string name="market_activity_planDate">活动时间：</string>
+    <string name="market_activity_upload_success">上传成功</string>
+    <string name="market_activity_waiting_for_upload">等待上传</string>
+    <string name="market_is_modify">非当月数据不能修改</string>
+    <string name="market_hxProportion_isnotnull">请填写核销比例</string>
+    <string name="market_quantity">数量:</string>
+    <string name="market_skuname">进店品项（ID）:</string>
+    <string name="market_skuprice">SKU单价:</string>
+    <string name="market_cxsku">促销品项:</string>
+    <string name="market_payment">费用支付金额:</string>
+    <string name="market_startDate">开始时间:</string>
+    <string name="market_endDate">结束时间:</string>
+
+    <!-- abnormal_pricet -->
+
+    <string name="abnormal_price_input">价格管理</string>
+    <!-- distribution -->
+    <string name="distribution">铺货管理</string>
+
+    <!-- inventory -->
+    <string name="inventory">货龄管理</string>
+    <string name="inventory_category_sort_quantity">数量：</string>
+    <string name="inventory_category_sort_batch">生产日期：</string>
+    <string name="inventory_category_sort_end_batch"> 到  </string>
+    <string name="inventory_add_category_sort">选 择 品 项</string>
+    <string name="inventory_input">生产日期（区间）</string>
+    <string name="inventory_input_batch">批次</string>
+
+    <!-- display -->
+    <string name="single_display">进入标准陈列</string>
+    <string name="multi_display">进入多点陈列</string>
+    <string name="multi_display_xpp">香飘飘</string>
+    <string name="multi_display_ylm">竞品</string>
+
+    <!-- customer -->
+    <string name="customer_name">客户名称:</string>
+    <string name="customer_contact">联系人:</string>
+    <string name="customer_phone">联系电话:</string>
+    <string name="customer_mobile">手机号:</string>
+    <string name="customer_areaAddress">镇/乡:</string>
+    <string name="customer_kunnr">经销商:</string>
+    <!-- 新增字段 -->
+    <string name="customer_importance">门店重要度:</string>
+    <string name="customer_annual_sale">门店年销售额:</string>
+    
+    <string name="customer_address">具体地址:</string>
+    <string name="customer_business_license">营业执照号:</string>
+    <string name="customer_channel">渠道:</string>
+    <string name="customer_create">创建终端门店</string>
+    <string name="customer_modify">修改门店信息</string>
+    <string name="customer_create_fail">创建失败</string>
+    <string name="customer_create_error">创建报错</string>
+    <string name="customer_create_success">创建成功</string>
+    <string name="customer_modify_fail">修改失败</string>
+    <string name="customer_modify_error">修改报错</string>
+    <string name="customer_modify_success">修改成功</string>
+    <string name="customer_same">客户已存在，营业执照号重复</string>
+<!-- sign -->
+ <string name="sign_name">考勤</string>
+ <string name="sign_in">签到</string>
+     <string name="sign_out">签退</string>
+     <string name="sign_inpt">签到拍照</string>
+     <string name="sign_outpt">签退拍照</string>
+    <!-- order -->
+    <string name="oldorder">历史一周订单</string>
+    <string name="order">订单管理</string>
+    <string name="order_add_product">增加本品</string>
+    <string name="order_add_gift">增加赠品</string>
+    <string name="order_totalNumber">本品总数：</string>
+    <string name="order_totalMoney">总金额：</string>
+    <string name="order_premiums">赠品总数：</string>
+    <string name="order_price">元</string>
+    <string name="order_category">品项:</string>
+    <string name="order_number">数量:</string>
+    <string name="order_prices">单价:</string>
+    <string name="order_totalprice">合计:</string>
+    <string name="order_productList">商品列表</string>
+	<string name="order_id">订单号:</string>
+    <string name="order_desc">订单描述:</string>
+    <string name="order_status">订单状态:</string>
+    <string name="order_funds_status">订单款项:</string>
+    
+    <string name="order_submit_ing">订单提交中...</string>
+     <string name="order_chche">订单未提交</string>
+    <string name="order_no_send">未送货</string>
+    <string name="order_sended">已送货</string>
+    <string name="order_funds_y">已打款</string>
+    <string name="order_funds_n">未打款</string>
+    <!-- 防串货查询 -->
+    <string name="chuanhao_search">防串货查询</string>
+    <string name="chuanhao_factory">生产工厂：</string>
+    <string name="chuanhao_date">生产日期：</string>
+    <string name="chuanhao_sku">品项：</string>
+    <string name="chuanhao_damacode">打码号：</string>
+    
+    <!-- 编辑拜访客户清单 -->
+    <string name="edit_visit_list">编辑清单</string>
+	<!-- kpi报表 -->
+	 <string name="kpi_main_title">KPI报表</string>
+    <!-- 库龄管理 -->
+    <string name="stock_age_choose_date">请选择日期</string>
+    <!-- 设置 -->
+    <string name="setting">设置</string>
+    <string name="setting_type1">设置创建门店默认区域，经销商：</string>
+    <string name="setting_type2">设置查询门店默认区域，经销商：</string>
+
+    <!-- 经销商管理 -->
+    <string name="kunnr_management_week">周库存</string>
+    <string name="kunnr_management_month">月库存</string>
+    <string name="kunnr_sales_day">每日分销量</string>
+    <string name="stock_check_time">请选择库存时间</string>
+    <string name="order_search_sku">请输入品项查询</string>
+    <string name="kunnr_stock_age">货龄时间:</string>
+    <string name="market_quantity_all">汇总箱数:</string>
+    <string name="kunnr_date_message">无效上报日期，无法选择库存信息</string>
+    <string name="kunnr_date_rm">已存在该库存上报时间，请仔细查看</string>
+    <string name="kunnr_date_wxrm">无有效库存上报时间</string>
+    <!-- 通用 -->
+
+    <string name="shi">是</string>
+    <string name="fou">否</string>
+    <string name="yes">确认</string>
+    <string name="cancel">取消</string>
+    <string name="sure_delete">确认删除?</string>
+    <string name="confirmation">确认信息  </string>
+    
+    <!-- what？？ -->
+    <string name="tag1">1</string>
+    <string name="tag2">2</string>
+    
+    <string name="save_fail">保存失败</string>
+    <string name="save_success">保存成功</string>
+    <string name="xiang">箱</string>
+    <string name="bei">元</string>
+    <string name="not_null">请输入查询条件</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="sure_visit">是否从拜访清单中删除？</string>
+    <string name="choose_all">选择全部</string>
+    <string name="cancle_choose">取消全选</string>
+    <string name="promotionalPrice">促</string>
+    <string name="standardPrice">标</string>
+    <string name="not_standardPrice">请标准价格</string>
+    <string name="upload_success">上传成功</string>
+    <string name="upload_fail">上传失败，请检查数据，并重试</string>
+    <string name="upload_error_network">上传失败，请检查网络</string>
+    <string name="uploaded">没有需要提交的数据</string>
+	<string name="wxshare">分享到微信  </string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:background="@color/list_color"
+    android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/Title"
+            android:layout_width="260dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/home_getShopList"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/dialog_line" />
+
+        <ListView
+            android:id="@+id/clist"
+            android:layout_width="fill_parent"
+            android:layout_height="360dp"
+            android:cacheColorHint="#00000000"
+            android:drawSelectorOnTop="true"
+            android:listSelector="@android:color/transparent" >
+        </ListView>
+        
+          <Button
+            android:id="@+id/dialog_cancel_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:background="@color/list_color"
+            android:drawableTop="@drawable/dialog_line1"
+            android:text="@string/cancel" />
+
+</LinearLayout>

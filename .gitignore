@@ -1,0 +1,12 @@
+*.class
+
+# Package Files #
+#*.jar
+*.war
+*.ear
+/bin/
+# Mac Files #
+.DS_Store
+
+.settings
+target

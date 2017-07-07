@@ -1,0 +1,346 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/slideHolder"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/list_color">
+
+
+    <LinearLayout
+        android:id="@+id/layout_left"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/list_color"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_actionbar" >
+
+            <Button
+                android:id="@+id/home_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back_btn" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/home_back"
+                android:text="@string/edit_visit_list"
+                android:textColor="@android:color/background_light"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/floppy" />
+        </RelativeLayout>
+ 	<TextView
+ 	      android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/setting_type1"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" /> 
+        
+<RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/customer_areaAddress"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/searchAddress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/areaAddress"
+                    android:layout_alignBottom="@+id/areaAddress"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/clearAddress"
+                    android:background="@drawable/find"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/clearAddress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/areaAddress"
+                    android:layout_alignBottom="@+id/areaAddress"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/edit_delete"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/areaAddress"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/searchAddress"
+                    android:background="@drawable/edittext_normal"
+                    android:inputType="textMultiLine"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" >
+                </EditText>
+            </RelativeLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" />
+
+        
+         <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/customer_kunnr"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/searchKunnr"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/kunnrName"
+                    android:layout_alignBottom="@+id/kunnrName"
+                    android:layout_toLeftOf="@+id/clearKunnr"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/find"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/clearKunnr"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/kunnrName"
+                    android:layout_alignBottom="@+id/kunnrName"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/edit_delete"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+                
+                <EditText
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/kunnrName"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/searchKunnr"
+                    android:background="@drawable/edittext_normal"
+                    android:inputType="textMultiLine"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" >
+                </EditText>
+            </RelativeLayout> 
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" />
+        
+        	<TextView
+        	      android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/setting_type2"
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" /> 
+        
+<RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/customer_areaAddress"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/searchAddress1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/areaAddress1"
+                    android:layout_alignBottom="@+id/areaAddress1"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/clearAddress1"
+                    android:background="@drawable/find"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/clearAddress1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/areaAddress1"
+                    android:layout_alignBottom="@+id/areaAddress1"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/edit_delete"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/areaAddress1"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/searchAddress1"
+                    android:background="@drawable/edittext_normal"
+                    android:inputType="textMultiLine"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" >
+                </EditText>
+            </RelativeLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" />
+
+        
+         <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                     android:layout_marginBottom="5dp"
+                	android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/customer_kunnr"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/searchKunnr1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/kunnrName1"
+                    android:layout_alignBottom="@+id/kunnrName1"
+                    android:layout_toLeftOf="@+id/clearKunnr1"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/find"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                
+                <Button
+                    android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/clearKunnr1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBaseline="@+id/kunnrName1"
+                    android:layout_alignBottom="@+id/kunnrName1"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/edit_delete"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+                
+                <EditText
+                     android:layout_marginBottom="5dp"
+               		 android:layout_marginTop="5dp"
+                    android:id="@+id/kunnrName1"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/searchKunnr1"
+                    android:background="@drawable/edittext_normal"
+                    android:inputType="textMultiLine"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" >
+                </EditText>
+            </RelativeLayout> 
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/dialog_line1" /> 
+        
+        
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_color"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_actionbar" >
+
+        <Button
+            android:id="@+id/home_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_btn" />
+
+        <TextView
+            android:id="@+id/sign_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/sign_name"
+            android:textColor="@android:color/background_light"
+            android:textSize="15sp" />
+
+        
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+             
+              <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                 
+
+                    <TextView 
+                        android:id="@+id/tv3_address"
+                        android:layout_height="wrap_content"
+                         android:layout_marginTop="15dp"
+                        android:text=""
+                        android:layout_width="300dp"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="15sp"
+        	            android:inputType="textMultiLine"
+            	        android:textColor="@android:color/black"
+                        />
+                </TableRow>
+                  <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+                   <Button
+        android:id="@+id/btn_sign_in"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="20dp"
+         android:layout_marginTop="15dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:background="@drawable/login_btn_selector"
+        android:text="@string/sign_in"
+        android:textColor="@color/white" />
+             </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+                 
+                        <TextView 
+                       android:id="@+id/sign_in_time"       
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginTop="15dp"
+                    android:textSize="15sp"
+                    android:text="签到时间:"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#000000"/>
+             </TableRow>
+                   <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+         
+
+                    <TextView 
+                        android:id="@+id/sign_in_address"
+                         android:layout_marginTop="15dp"
+                        android:layout_height="wrap_content"
+                        android:text="签到地点:"
+                        android:layout_width="fill_parent"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="15sp"
+        	            android:inputType="textMultiLine"
+            	        android:textColor="@android:color/black"
+                        />
+             </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+         
+
+                    <TextView 
+                        android:id="@+id/sign_in_user"
+                         android:layout_marginTop="15dp"
+                        android:layout_height="wrap_content"
+                        android:text="签到人:"
+                        android:layout_width="fill_parent"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="15sp"
+        	            android:inputType="textMultiLine"
+            	        android:textColor="@android:color/black"
+                        />
+             </TableRow>
+            
+                
+             
+            
+            </TableLayout>
+            
+        
+            
+        </LinearLayout>
+    </ScrollView>
+    <ScrollView
+        android:id="@+id/sc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" >
+
+        <TableLayout
+            android:id="@+id/photoViewTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableLayout>
+    </ScrollView>>
+</LinearLayout>

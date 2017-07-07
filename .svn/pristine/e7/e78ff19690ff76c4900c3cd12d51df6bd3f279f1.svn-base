@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//res/layout/layout_kunnr_management.xml=gbk
+encoding//src/com/xpp/moblie/application/XPPApplication.java=UTF-8
+encoding//src/com/xpp/moblie/print/Order.java=GBK
+encoding//src/com/xpp/moblie/print/XPPBluetoothPrinter.java=UTF-8
+encoding//src/com/xpp/moblie/provider/WebService.java=UTF-8
+encoding//src/com/xpp/moblie/screens/LoginActivity.java=UTF-8
+encoding/<project>=gbk

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layWrapper"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_background_clicking"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/custName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/dialog_color"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/custName1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/dialog_color"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/kunnr"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginRight="10dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/dialog_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginRight="10dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/dialog_color"
+        android:textSize="15sp" />
+
+</LinearLayout>

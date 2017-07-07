@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:background="@color/list_color"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/abnormal_price_input"
+            android:textColor="@color/dialog_color"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dip" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="2dp"
+            android:background="@drawable/dialog_line" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/errorPrice"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:digits="1234567890."
+                android:gravity="center_vertical"
+                android:textColor="@color/dialog_color"
+                android:textSize="15sp"
+               />
+
+            <TextView
+                android:id="@+id/inputUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/bei"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="240dp"
+            android:layout_height="40dp" >
+
+            <Button
+                android:id="@+id/dialog_cancel_btn"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@color/list_color"
+                android:drawableTop="@drawable/dialog_line1"
+                android:text="@string/cancel"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:background="@drawable/dialog_line2" />
+
+            <Button
+                android:id="@+id/dialog_ok_btn"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@color/list_color"
+                android:drawableTop="@drawable/dialog_line1"
+                android:text="@string/yes"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

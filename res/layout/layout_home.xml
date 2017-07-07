@@ -1,0 +1,154 @@
+<com.xpp.moblie.util.SlideHolder xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/slideHolder"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/list_color"
+    tools:context=".HomeActivity" >
+
+    <!-- 侧滑菜单 -->
+
+    <RelativeLayout
+        android:id="@+id/layout_right"
+        android:layout_width="170dp"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/menu_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_menu_top"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/menu_head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/menu_head" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dip"
+                android:paddingTop="10dip"
+                android:textColor="@android:color/background_light"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/menu_set"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/dayType"
+            android:layout_below="@+id/menu_title"
+            android:background="@drawable/bg_menu"
+            android:divider="@drawable/menu_line" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/dayType"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_menu"
+            android:drawableTop="@drawable/menu_line"
+            android:paddingLeft="20dp"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_left"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/list_color"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_actionbar" >
+
+            <Button
+                android:id="@+id/home_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back_btn"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/home_back"
+                android:text="@string/shop_visit"
+                android:textColor="@android:color/background_light"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/shopSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/btn_search" />
+            <ImageView 
+                android:id="@+id/map_icon_img"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/map_icons"
+                android:layout_toLeftOf="@id/shopSearch"
+                android:visibility="visible"/>
+
+            <Button
+                android:id="@+id/addCustomer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/add_btn"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <AutoCompleteTextView
+                android:id="@+id/parameter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/search_bar"
+                android:completionThreshold="1"
+                android:hint="@string/home_search_shop"
+                android:maxLength="10"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/settingList"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/grey_line"
+            android:dividerHeight="1dip"
+            android:drawSelectorOnTop="true"
+            android:listSelector="@android:color/transparent" />
+    </LinearLayout>
+
+</com.xpp.moblie.util.SlideHolder>

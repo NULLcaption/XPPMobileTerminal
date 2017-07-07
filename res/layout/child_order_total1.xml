@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_background_clicking"
+    android:orientation="vertical" >
+<LinearLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/orderIdtv"
+            style="@style/LoginEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:text="@string/order_id" />
+
+        <TextView
+            android:id="@+id/orderId"
+            style="@style/LoginEditText"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/orderIdtv" />
+
+      
+        <TextView
+            android:id="@+id/statustv"
+            style="@style/LoginEditText"
+             android:layout_below="@+id/orderId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/order_status" />
+
+        <TextView
+            android:id="@+id/status"
+            style="@style/LoginEditText"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/statustv"
+            android:layout_below="@+id/orderId"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/statustv"
+            android:text="11111" />
+        
+        <TextView
+            android:id="@+id/fundsStatustv"
+            style="@style/LoginEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           
+                android:layout_alignTop="@+id/statustv"
+            android:layout_toRightOf="@+id/status" 
+            android:text="@string/order_funds_status" />
+        <TextView
+            android:id="@+id/fundsStatus"
+            style="@style/LoginEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/fundsStatustv"
+            android:layout_below="@+id/orderId"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/fundsStatustv"
+            android:text="11111" />
+        
+        
+        
+          <TextView
+            android:id="@+id/orderDesctv"
+            style="@style/LoginEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statustv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/order_desc" 
+            />
+
+        <TextView
+            android:id="@+id/orderDesc"
+            style="@style/LoginEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/orderDesctv"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/orderDesctv"
+           />
+        
+      
+      
+        
+    </RelativeLayout>
+    <Button
+            android:id="@+id/bt_sms"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+             android:layout_marginTop="0dp"
+              android:layout_marginLeft="20dp"
+            android:background="@drawable/sms"
+            android:text=""
+            android:textSize="15sp" />
+        <ImageView 
+        android:id="@+id/lanyadayin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/dayinji"
+        />
+    
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgView1"
+        android:layout_width="wrap_content"
+        android:layout_height="0.3dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dialog_line1" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="5dp" >
+
+        <TextView
+            android:id="@+id/totalprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_totalprice"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/total"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/number"
+            android:text="99999"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/totalprice"
+            android:layout_below="@+id/totalprice"
+            android:text="@string/order_number"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" 
+            android:visibility="gone"
+         />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:text="20202"
+            android:layout_toRightOf="@+id/number"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+             />
+    </RelativeLayout>
+
+</LinearLayout>

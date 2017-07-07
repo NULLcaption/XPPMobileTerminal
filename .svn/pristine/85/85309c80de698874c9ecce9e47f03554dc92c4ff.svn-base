@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll2"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/fx"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="分销KPI表(月份)"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+ 
+
+    <ListView
+        android:id="@+id/list_kpi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/kpi_list_line"
+        android:divider="@drawable/dashed"
+        android:dividerHeight="1dp"
+         />
+
+    <Button
+        android:id="@+id/btn_jxs_fx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/btn_kpi_selector"
+        android:text="点击显示经销商分销KPI表" />
+
+    <LinearLayout
+        android:id="@+id/jxs_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ListView
+            android:id="@+id/jxs_list_kpi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/kpi_list_line"
+            android:divider="@drawable/dashed"
+        android:dividerHeight="1dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
